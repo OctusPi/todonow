@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	/* Light Theme Colors */
+	--primary-color-light: #1e97d9; 
+	--secondary-color-light: #3490d6; 
+	--accent-color-light: #77b8f2;
+	--background-color-light: #f0f0f0; /* Fundo principal claro */
+	--background-secondary-color-light: #FFFFFF; /* Fundo secundário claro */
+	--text-color-light: #2d2d2d; /* Texto suave escuro */
+	--muted-text-color-light: #8a8d91; /* Texto ainda mais suave */
+
+	/* Input Colors - Light Theme */
+	--input-background-light: #dfdfdf; /* Fundo do input claro */
+	--input-background-focus-light: #d2d2d2; /* Fundo do input claro com foco */
+	--input-placeholder-color-light: #b0b3b6; /* Placeholder claro */
+	--input-border-color-light: #c4c4c4; /* Borda padrão do input claro */
+	--input-border-focus-color-light: #99e2f5; /* Borda do input claro com foco */
+
+	/* Dark Theme Colors */
+	--primary-color-dark: #3ccdf1;
+	--secondary-color-dark: #3490d6; 
+	--accent-color-dark: #77b8f2; 
+	--background-color-dark: #2e2e2e; /* Fundo principal escuro */
+	--background-secondary-color-dark: #464646; /* Fundo secundário escuro */
+	--text-color-dark: #e2e2e2; /* Texto suave claro */
+	--muted-text-color-dark: #9ca0a4; /* Texto mais suave */
+
+	/* Input Colors - Dark Theme */
+	--input-background-dark: #555555; /* Fundo do input escuro */
+	--input-background-focus-dark: #626262; /* Fundo do input escuro com foco */
+	--input-placeholder-color-dark: #a2a2a2; /* Placeholder escuro */
+	--input-border-color-dark: #666666; /* Borda padrão do input escuro */
+	--input-border-focus-color-dark: #a3ddeb; /* Borda do input escuro com foco */
+
+	/* Shared Colors */
+	--error-color: #e7a0a0; /* Rosa suave */
+	--error-color-hover: #ce5454; /* Rosa forte apra hover */
+	--success-color: #63e2b1; /* Verde suave para sucesso */
+	--success-color-hover: #0e8859; /* Verde forte para hover sucesso */
+	--warning-color: #f7c76f;
+	--warning-color-hover: #c78f28;
+	--info-color: #88c8d4;
+	--info-color-hover: #1b7d8f;
+}
+
+/* Light Theme */
+.light {
+	--primary-color: var(--primary-color-light);
+	--secondary-color: var(--secondary-color-light);
+	--accent-color: var(--accent-color-light);
+	--background-color: var(--background-color-light);
+	--background-secondary-color: var(--background-secondary-color-light);
+	--text-color: var(--text-color-light);
+	--muted-text-color: var(--muted-text-color-light);
+	--input-background: var(--input-background-light);
+	--input-background-focus: var(--input-background-focus-light);
+	--input-placeholder-color: var(--input-placeholder-color-light);
+	--input-border-color: var(--input-border-color-light);
+	--input-border-focus-color: var(--input-border-focus-color-light);
+	--load-color: #1b1b1bd3;
+}
+
+/* Dark Theme */
+.dark {
+	--primary-color: var(--primary-color-dark);
+	--secondary-color: var(--secondary-color-dark);
+	--accent-color: var(--accent-color-dark);
+	--background-color: var(--background-color-dark);
+	--background-secondary-color: var(--background-secondary-color-dark);
+	--text-color: var(--text-color-dark);
+	--muted-text-color: var(--muted-text-color-dark);
+	--input-background: var(--input-background-dark);
+	--input-background-focus: var(--input-background-focus-dark);
+	--input-placeholder-color: var(--input-placeholder-color-dark);
+	--input-border-color: var(--input-border-color-dark);
+	--input-border-focus-color: var(--input-border-focus-color-dark);
+	--load-color: #1b1b1bd3;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	font-weight: normal;
+}
+
+body {
+	min-height: 100vh;
+	color: var(--text-color);
+	background: var(--background-color);
+	transition:
+		color 0.5s,
+		background-color 0.5s;
+	line-height: 1.6;
+	font-family:
+		Inter,
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		Roboto,
+		Oxygen,
+		Ubuntu,
+		Cantarell,
+		'Fira Sans',
+		'Droid Sans',
+		'Helvetica Neue',
+		sans-serif;
+	font-size: 14px;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.active-link {
+	@apply font-semibold;
+	color: var(--primary-color);
+}

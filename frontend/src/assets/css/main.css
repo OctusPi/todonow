@@ -1,0 +1,127 @@
+@import './base.css';
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.load-wall {
+	position: fixed;
+	width: 100%;
+	height: 100vh;
+	background-color: var(--load-color);
+	top: 0;
+	z-index: 3000;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.load-img {
+	width: 35px;
+	height: auto;
+	animation: rotate 3s linear infinite;
+}
+
+.d-none {
+	display: none !important;
+}
+
+.container-main {
+	min-height: 100vh;
+}
+
+.content-main{
+	min-height: calc(100vh - 120px);
+}
+
+.aside-main{
+	width: 240px;
+}
+
+.section-main{
+	width: calc(100% - 240px);
+}
+
+.content-box{
+	@apply p-6 rounded-lg shadow-sm;
+}
+
+.box {
+	background: var(--background-secondary-color);
+}
+
+.txt-color{
+	color: var(--text-color);
+}
+.txt-color-sec{
+	color: var(--muted-text-color);
+}
+
+.label-input {
+	@apply block mb-1 text-xs font-normal;
+}
+
+.text-input {
+	@apply py-2.5 px-3 rounded-md border-none font-medium text-base
+    focus:blur-0 shadow-none outline-none;
+
+	color: var(--text-color);
+	font-size: 0.9rem;
+	background-color: var(--input-background);
+
+}
+
+.text-input:focus {
+	border-color: var(--primary-color);
+	color: var(--text-color);
+	background-color: var(--input-background-focus);
+}
+
+select.text-input {
+	padding-top: 11px;
+	padding-bottom: 11px;
+}
+
+.form-control-alert {
+	background-color: var(--error-color);
+}
+
+.form-control-alert::placeholder{
+	color: white !important;
+}
+
+.btn {
+	@apply flex justify-center items-center rounded-md px-3 py-2.5 text-xs font-semibold shadow-sm;
+}
+
+.btn-action {
+	@apply bg-sky-600 text-white hover:bg-sky-500 focus-visible:outline focus-visible:outline-0 focus-visible:outline-offset-2 focus-visible:outline-violet-600;
+}
+
+.btn-danger {
+	@apply bg-red-100 text-red-700 hover:bg-red-200 focus-visible:outline focus-visible:outline-0 focus-visible:outline-offset-2 focus-visible:outline-red-500;
+}
+
+.btn-warning {
+	@apply bg-yellow-200 text-yellow-700 hover:bg-yellow-300 focus-visible:outline focus-visible:outline-0 focus-visible:outline-offset-2 focus-visible:outline-yellow-500;
+}
+
+.btn-cancel {
+	@apply bg-gray-200 text-gray-900 hover:bg-gray-300 focus-visible:outline focus-visible:outline-0 focus-visible:outline-offset-2 focus-visible:outline-gray-500;
+}
+
+.btn-tab-action{
+	@apply text-xs text-violet-100 hover:text-white shadow-none font-normal;
+}
+
+@media(max-width:768px){
+	.section-main{
+		width: 100%;
+	}
+}

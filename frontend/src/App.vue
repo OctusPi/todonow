@@ -1,85 +1,60 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { onMounted, ref } from 'vue';
+import { RouterView } from 'vue-router';
+import theme from '@/stores/theme';
+
+import AlertUi from './components/AlertUi.vue';
+import ModalDeleteUi from './components/ModalDeleteUi.vue';
+
+const alert = ref({ show: false, data: {} });
+const list = ref([]);
+const erase = ref({id:null, url: null});
+
+onMounted(() => {
+  theme.apply_theme();
+});
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <AlertUi :alert="alert" />
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
+  <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
+    <div
+      class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#8ff0ff] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+      style="
+				clip-path: polygon(
+					74.1% 44.1%,
+					100% 61.6%,
+					97.5% 26.9%,
+					85.5% 0.1%,
+					80.7% 2%,
+					72.5% 32.5%,
+					60.2% 62.4%,
+					52.4% 68.1%,
+					47.5% 58.3%,
+					45.2% 34.5%,
+					27.5% 76.7%,
+					0.1% 64.9%,
+					17.9% 100%,
+					27.6% 76.8%,
+					76.1% 97.7%,
+					74.1% 44.1%
+				);
+			" />
+  </div>
 
-  <RouterView />
+  <div id="load-wall" class="load-wall d-none">
+    <img id="load-img" class="load-img rotate" src="./assets/imgs/load.svg" />
+  </div>
+
+  <RouterView :datalist="list"
+  @callAlert="data => { alert = data; }"
+  @callRemove="data => { erase = data; }" />
+
+  <ModalDeleteUi v-model="erase"
+  @callUpdate="data => { list = data; } "
+  @callAlert="data => { alert = data; }" />
+
+
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
-</style>
