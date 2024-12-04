@@ -37,7 +37,6 @@ class Task extends Model implements Imodel
                 Rule::unique($this->table, 'title')->where(function ($query) {
                     return $query->where('user_id', $this->user_id);
             })->ignore($this->id)],
-            'status'  => 'required',
             'user_id' => 'required'
         ];
     }

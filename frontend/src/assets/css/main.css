@@ -45,7 +45,7 @@
 }
 
 .section-main{
-	width: calc(100% - 240px);
+	width: 100%;
 }
 
 .content-box{
@@ -117,11 +117,6 @@ select.text-input {
 }
 
 .btn-tab-action{
-	@apply text-xs text-violet-100 hover:text-white shadow-none font-normal;
+	@apply text-xs text-sky-500 hover:text-sky-600 shadow-none font-normal;
 }
 
-@media(max-width:768px){
-	.section-main{
-		width: 100%;
-	}
-}

@@ -10,8 +10,6 @@ class Data {
 	ui = (mode = null) => {
 		switch (mode) {
 			case 'register':
-				this.page.ui.search = false;
-				this.page.ui.prepare = false;
 				this.page.ui.register = !this.page.ui.register;
 				this.page.valids = {};
 				this.page.data = {};
@@ -19,13 +17,11 @@ class Data {
 			case 'update':
 				this.page.ui.search = false;
 				this.page.ui.register = !this.page.ui.register;
-				this.page.ui.prepare = false;
 				this.page.valids = {};
 				break;
 			case 'search':
 				this.page.ui.search = !this.page.ui.search;
 				this.page.ui.register = false;
-				this.page.ui.prepare = false;
 				this.page.search = {};
 				break;
 			case 'prepare':
@@ -35,7 +31,6 @@ class Data {
 				break;
 			default:
 				this.page.ui.register = false;
-				this.page.ui.prepare = false;
 				break;
 		}
 	};

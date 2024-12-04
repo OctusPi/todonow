@@ -1,14 +1,10 @@
 import { reactive } from 'vue';
-import storeEnterprise from '@/stores/enterprise';
 import Data from './data';
 
 function buildPage(preloaded = {}) {
-	const enterprise = storeEnterprise.get_enterprise();
 	return reactive({
 		url: '',
-		enterprise: enterprise,
-		enterprise_name: enterprise?.name,
-		ui: { list: true },
+		ui: { register:false, list: true },
 		datalist: [],
 		header: [],
 		selects: {},

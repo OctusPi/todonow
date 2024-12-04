@@ -107,11 +107,10 @@ function register() {
         return;
     }
 
-    http.post(`${page.url}/newuser`, page.data, emit, () => {
-        console.log('entrou')
-
-        login()
-        
+    http.post(`${page.url}/newuser`, page.data, emit, (resp) => {
+        if (http.success(resp)) {
+            login()
+        }
     });
 }
 

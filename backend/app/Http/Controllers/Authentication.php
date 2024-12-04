@@ -66,16 +66,16 @@ class Authentication extends Controller
         $user = User::where("email", $request->email)->first();
 
         if($user){
-            return response()->json(Notify::warning('Já existe um usuário com o e-mail informado...'));
+            return response()->json(Notify::warning('Já existe um usuário com o e-mail informado...'), 401);
         }
 
         if ($request->password !== $request->passdoublecheck) {
-            return response()->json(Notify::warning('Senhas divergentes informadas!'), 400);
+            return response()->json(Notify::warning('Senhas divergentes informadas!'), 401);
         }
 
         if (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z]).{8,}$/', $request->password)) {
             return response()->json(Notify::warning('Senha não atende aos critérios de segurança!
-            Sua senha deve conter no minimo 08 caracteres com letras, números e símbolos'), 400);
+            Sua senha deve conter no minimo 08 caracteres com letras, números e símbolos'), 401);
         }
 
         $user = new User($request->only(['name', 'email', 'password']));

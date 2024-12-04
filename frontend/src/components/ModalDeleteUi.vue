@@ -23,13 +23,6 @@
                                     continuar?
                                 </p>
                             </div>
-                            <div class="mt-4">
-                                <label for="passconf" class="label-input">Senha de Confirmação</label>
-                                <input id="passconf" name="passconf" type="password" autocomplete="off"
-                                    v-model="deleteModal.password" :class="{ 'form-control-alert': deleteModal.isEmpty, }"
-                                    class="block w-full text-input"
-                                    placeholder="Digite sua senha de acesso ao sistema" />
-                            </div>
 
                             <div class="mt-6 flex justify-end">
                                 <button type="button" class="btn btn-danger mx-2" @click="remove">
@@ -52,7 +45,6 @@
 <script setup>
 import { reactive, watch } from 'vue';
 import http from '@/services/http';
-import notifys from '@/utils/notifys';
 
 import {
     TransitionRoot,
@@ -69,8 +61,6 @@ const model = defineModel({ default: () => { } });
 
 const deleteModal = reactive({
     isOpen: false,
-    isEmpty: false,
-    password: null
 });
 
 function closeModal() {
@@ -79,14 +69,8 @@ function closeModal() {
 }
 
 function remove() {
-    if (!deleteModal.password) {
-        emit('callAlert', notifys.warning('Informe sua senha de acesso!'));
-        deleteModal.isEmpty = true;
-        return;
-    }
-
-    deleteModal.isEmpty = false;
-    http.destroy(`${model.value.url}/destroy`, { id: model.value.id, password: deleteModal.password }, emit, resp => {
+    
+    http.get(`${model.value.url}/destroy/${model.value.id}`, emit, resp => {
         closeModal()
         if (http.success(resp)) {
             http.post(`${model.value.url}/list`, model.value.search, emit, resp => {
