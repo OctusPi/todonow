@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\Tasks;
+use App\Http\Controllers\Users;
 use App\Utils\Notify;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Authentication;
@@ -9,6 +10,8 @@ use Illuminate\Http\Request;
 Route::prefix('/auth')->controller(Authentication::class)->group(function () {
     Route::post('', 'login');
     Route::post('/newuser', 'newuser');
+    Route::get('/logout', 'logout');
+    Route::get('/check', 'check');
 });
 
 
@@ -25,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
         });
     };
 
+    $common('/users', Users::class);
     $common('/tasks', Tasks::class);
 
 });

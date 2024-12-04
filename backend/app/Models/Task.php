@@ -16,7 +16,7 @@ class Task extends Model implements Imodel
 
     public function modelName(): string
     {
-        return 'tasks';
+        return 'task';
     }
 
     protected $table = 'tasks';
@@ -42,7 +42,7 @@ class Task extends Model implements Imodel
         ];
     }
 
-    public static function messages(): array
+    public function messages(): array
     {
         return [
             'required' => 'Campo obrigatório não informado!',
@@ -53,5 +53,10 @@ class Task extends Model implements Imodel
     public function user():BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public static function list_status():array
+    {
+        return ['Pendente', 'Finalizada'];
     }
 }

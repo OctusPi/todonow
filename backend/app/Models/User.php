@@ -45,10 +45,9 @@ class User extends Authenticatable implements Imodel
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+    public function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -61,7 +60,7 @@ class User extends Authenticatable implements Imodel
 
     public function modelName(): string
     {
-        return 'tasks';
+        return 'user';
     }
 
     public function rules(): array
@@ -73,7 +72,7 @@ class User extends Authenticatable implements Imodel
         ];
     }
 
-    public static function messages(): array
+    public function messages(): array
     {
         return [
             'required' => 'Campo obrigatório não informado!',
