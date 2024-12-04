@@ -17,9 +17,9 @@
                     <form class="space-y-6" @submit.prevent="login">
                         <div>
                             <label for="email" class="label-input">E-mail</label>
-                            <input id="email" name="username" type="email" autocomplete="email"
-                                class="block w-full text-input" v-model="page.data.username"
-                                :class="{ 'form-control-alert': page.rules.valids.username }"
+                            <input id="email" name="email" type="email" autocomplete="email"
+                                class="block w-full text-input" v-model="page.data.email"
+                                :class="{ 'form-control-alert': page.rules.valids.email }"
                                 placeholder="Digite seu e-mail" />
                         </div>
                         <div>
@@ -40,8 +40,9 @@
                     </form>
 
                     <p class="mt-10 text-center text-sm/6 text-gray-500">
-                        Ainda não assinou?
-                        <RouterLink to="/trial" class="active-link">Inicie o teste grátis por 14 dias
+                        Você é novo aqui?
+                        <RouterLink to="/newuser" class="active-link">
+                            Realize seu Cadastro
                         </RouterLink>
                     </p>
                 </div>
@@ -49,15 +50,13 @@
                 <div v-else class="text-center">
                     <component :is="UserCircleIcon" class="h-16 w-16 mx-auto" />
                     <h2 class="mt-4">{{ page.user.name }}</h2>
-                    <p class="small txt-color-sec p-0 m-0">Perfil: {{ page.user.profile }}</p>
-                    <p class="small txt-color-sec p-0 m-0">Ultimo Acesso: {{ page.user.lastlogin }}</p>
 
                     <div class="flex justify-center mt-10">
                         <button type="button" class="btn btn-cancel mx-2" @click="logout">
                             <span>Sair...</span>
                             <component :is="ArrowLeftEndOnRectangleIcon" class="w-5 h-5 ms-1" />
                         </button>
-                        <RouterLink to="/dashboard" class="btn btn-action mx-2">
+                        <RouterLink to="/tasks" class="btn btn-action mx-2">
                             <component :is="ArrowRightEndOnRectangleIcon" class="w-5 h-5 me-1" />
                             <span>Partiu!</span>
                         </RouterLink>
@@ -90,7 +89,7 @@ const page = reactive({
     data: {},
     rules: {
         fields: {
-            username: 'required|email',
+            email: 'required|email',
             password: 'required',
         },
         valids: {},
@@ -106,13 +105,8 @@ function login() {
 
     http.post(page.url, page.data, emit, response => {
         const user = response.data.user;
-
-
         auth.set_user(user);
-
-        
-
-        window.location = '/selectenterprise';
+        window.location = '/tasks';
     });
 }
 

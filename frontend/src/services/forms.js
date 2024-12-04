@@ -42,6 +42,7 @@ function checkrule(rule, value) {
 	const regexPhone = /^\(\d{2}\)\s?\d{4,5}-\d{4}$/;
 	const regexCPF = /^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$/;
 	const regexDate = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+	const regexPass = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z]).{8,}$/;
 
 	const cnpjValid = cnpj => {
 		let b = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
@@ -85,6 +86,10 @@ function checkrule(rule, value) {
 			isvalid = cnpjValid(value);
 			message = isvalid ? '' : 'Digite um CNPJ válido!';
 			break;
+		case 'password':
+				isvalid = regexPass.test(value);
+				message = isvalid ? '' : 'Sua senha não atende aos requisitos de segurança...';
+				break;
 		default:
 			isvalid = false;
 			message = 'Regra de validação não reconhecida!';
