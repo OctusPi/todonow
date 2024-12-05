@@ -1,5 +1,5 @@
 <template>
-    <div v-if="model.data">
+    <div v-if="model?.data">
         <div class="flex items-center justify-center space-x-2 py-4">
             <!-- Botão de retroceder -->
             <button :disabled="model.current_page == 1" @click="navigation(model.current_page - 1)">
@@ -43,8 +43,6 @@ function navigation(page) {
         model.value = resp.data
     })
 }
-
-console.log(model.value)
 
 watch(() => props.search, (newdata) => {
     paginator.search = newdata

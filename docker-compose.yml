@@ -31,7 +31,7 @@ services:
       - ./backend:/var/www/html
       - /var/www/html/vendor
     ports:
-      - "8000:80"
+      - "${PORT_API}:80"
     networks:
       - webnet
     depends_on:
@@ -43,7 +43,7 @@ services:
       context: ./frontend
     container_name: frontend
     ports:
-      - "8080:80"
+      - "${PORT_CLIENT}:80"
     networks:
       - webnet
     depends_on:
