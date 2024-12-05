@@ -120,7 +120,7 @@ Tenha certeza de ter um banco de dados rodando em seu ambiente e configure o arq
 
 #### Frontend (pasta frontend)
 
-1. Configure seu arquivo .env
+1. Navegue até a pasta `frontend`:
 
     ```bash
     cd frontend
