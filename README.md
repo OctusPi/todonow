@@ -88,7 +88,7 @@ API: `http://localhost:8000/api`
 
 CLIENT: `http://localhost:5173`
 
-Caso realize alterações nas portas padões lembre-se de confirurar os demais arquivos `.env` para o backend e frontend com as mesmas portas.
+Caso realize alterações nas portas padrões lembre-se de confirurar os demais arquivos `.env` para o backend e frontend com as mesmas portas.
 
 
 ## Construindo a aplicação manualmente
@@ -138,7 +138,7 @@ Tenha certeza de ter um banco de dados rodando em seu ambiente e configure o arq
     ```
 
 #### Frontend (pasta frontend)
-2. Navegue até a pasta `backend`:
+2. Navegue até a pasta `frontend`:
 
    ```bash
    npx vitest
