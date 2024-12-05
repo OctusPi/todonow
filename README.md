@@ -6,7 +6,7 @@ Este projeto é composto por três partes principais:
 - **Frontend:** Aplicação Vue.js.
 - **Banco de Dados:** MySQL.
 
-O projeto está preparado para ser executado tanto manualmente quanto utilizando Docker para simplificar o processo de configuração.
+O projeto está preparado para ser executado tanto manualmente quanto utilizando Docker para simplificar o processo de build.
 
 ---
 
@@ -35,11 +35,15 @@ O projeto está preparado para ser executado tanto manualmente quanto utilizando
 
 ### 1. Pré-requisitos
 
+- **Docker** ( opcional )
+
+ou
+
 - **PHP** >= 8.3
 - **Composer** >= 2.7
 - **Node.js** >= 18
 - **MySQL** >= 8.0
-- **Docker** ( opcional )
+
 
 ### 2. Criar os arquivos `.env`
 Os arquivos de configuração `.env` são necessários para o funcionamento correto do projeto. Para criar esses arquivos:
@@ -87,9 +91,7 @@ CLIENT: `http://localhost:5173`
 Caso realize alterações nas portas padões lembre-se de confirurar os demais arquivos `.env` para o backend e frontend com as mesmas portas.
 
 
-## Contruindo a aplicação manualmente
-
-
+## Construindo a aplicação manualmente
 
 ### 1. Instalação
 
@@ -101,9 +103,9 @@ Caso realize alterações nas portas padões lembre-se de confirurar os demais a
     DB_CONNECTION=mysql
     DB_HOST=127.0.0.1
     DB_PORT=3306
-    DB_DATABASE=beautybox_db
-    DB_USERNAME=root
-    DB_PASSWORD=
+    DB_DATABASE=todonow
+    DB_USERNAME=todo
+    DB_PASSWORD=senha123
     ```
 Tenha certeza de ter um banco de dados rodando em seu ambiente e configure o arquivo `.env` com suas credenciais corretamente.
 
@@ -115,7 +117,6 @@ Tenha certeza de ter um banco de dados rodando em seu ambiente e configure o arq
    php artisan migrate
    php artisan serve
     ``` 
-
 
 #### Frontend (pasta frontend)
 
