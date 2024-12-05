@@ -14,8 +14,10 @@
             leave-to="opacity-0 scale-95">
             <DialogPanel
               class="box w-full max-w-lg transform overflow-hidden rounded-2xl p-6 text-left align-middle shadow-xl transition-all">
-              <DialogTitle as="div" class="flex justify-between">
-                
+              <DialogTitle as="div" class="flex items-center">
+                <div class="p-2.5 me-2 hidden md:block text-sky-700 bg-sky-200 rounded-md">
+                  <component :is="DocumentTextIcon" class="h-5 w-5" />
+                </div>
                 <div class="text-start">
                   <h2 class="text-lg font-semibold leading-6 text-sky-400">
                     Registro de Tarefa
@@ -24,11 +26,8 @@
                     Para registrar uma tarefa informe seu título e adicione uma descrição.
                   </p>
                 </div>
-                <div class="p-2.5 hidden md:block text-sky-700 bg-sky-300 rounded-md">
-                  <component :is="DocumentTextIcon" class="h-5 w-5" />
-                </div>
+                
               </DialogTitle>
-
 
               <div class="mt-6">
                 <form @submit.prevent="action.save(null, () => { page.ui.register = false })">
@@ -36,6 +35,7 @@
                     <div class="col-span-6">
                       <label for="title" class="label-input">Título da Tarefa</label>
                       <input id="title" name="title" type="text" v-model="page.data.title"
+                        :class="{ 'form-control-alert': page.valids.title }"
                         class="text-input w-full" placeholder="Fazer Compras" />
                     </div>
                     <div class="col-span-6">
@@ -58,7 +58,6 @@
                   </div>
                 </form>
               </div>
-
 
             </DialogPanel>
           </TransitionChild>
@@ -106,15 +105,23 @@
 
           <form @submit.prevent="action.list">
             <div class="grid grid-cols-6 gap-4">
+              
               <div class="col-span-6 md:col-span-2">
-                <label for="barcode" class="label-input">Código de Barras</label>
-                <input id="barcode" name="barcode" type="text" v-model="page.search.barcode" class="text-input w-full"
-                  placeholder="0000000" />
+                <label for="title" class="label-input">Titulo</label>
+                <input id="title" name="title" type="text" v-model="page.search.title" class="text-input w-full"
+                  placeholder="Busque pelo titulo da tarefa" />
               </div>
-              <div class="col-span-6 md:col-span-4">
-                <label for="name" class="label-input">Item</label>
-                <input id="name" name="name" type="text" v-model="page.search.name" class="text-input w-full"
-                  placeholder="Busque por parte no nome do item" />
+              <div class="col-span-6 md:col-span-2">
+                <label for="description" class="label-input">Descrição</label>
+                <input id="description" name="description" type="text" v-model="page.search.description" class="text-input w-full"
+                  placeholder="Busque pela descrição da tarefa" />
+              </div>
+              <div class="col-span-6 md:col-span-2">
+                <label for="status" class="label-input">Status</label>
+                <select id="status" name="status" v-model="page.search.status" class="text-input w-full">
+                  <option></option> 
+                  <option v-for="(i,j) in page.selects.status" :key="j" :value="i">{{ i }}</option> 
+                </select>
               </div>
             </div>
             <div class="mt-6 flex items-center justify-end space-x-2">
@@ -144,7 +151,6 @@
   <FooterMain />
 </template>
 
-
 <script setup>
 import { onMounted, watch } from "vue";
 import Layout from "@/services/layout";
@@ -153,15 +159,8 @@ import HeaderMain from "@/components/HeaderMain.vue";
 import FooterMain from "@/components/FooterMain.vue";
 import TableList from "@/components/TableList.vue";
 import Mounts from "@/services/mounts";
-import {
-  TransitionRoot,
-  TransitionChild,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-} from '@headlessui/vue';
+import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from '@headlessui/vue';
 import { CheckIcon, DocumentTextIcon, MagnifyingGlassIcon, PlusCircleIcon, XMarkIcon } from "@heroicons/vue/24/outline";
-
 
 const emit = defineEmits(['callAlert', 'callRemove'])
 const props = defineProps({ datalist: { type: Array, default: () => [] } })
@@ -178,7 +177,7 @@ const [page, action] = Layout.new(emit, {
     { title: 'VENDA', key: 'price_sale', sub: [{ key: 'measure_unit' }] },
   ],
   selects: {
-    'measure_units': ['ml', 'gm', 'und', 'kit']
+    status:['Pendente', 'Finalizada']
   },
   rules: {
     title: 'required'
@@ -190,6 +189,6 @@ watch(() => props.datalist, (newdata) => {
 })
 
 onMounted(() => {
-
+  action.list()
 })
 </script>

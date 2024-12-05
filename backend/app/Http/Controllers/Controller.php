@@ -126,7 +126,9 @@ abstract class Controller
             $request->page ? fn() => $query->paginate($request->total_page ?? self::PAGINATION_SIZE, page: $request->page) : null,
         ], fn($clause) => $clause && $clause());
 
-        return response()->json(['data' => $query->get()?->toArray(), 'total' => $query->total()]);
+        $data = $query->get();
+
+        return response()->json(['data' => $data?->toArray(), 'total' => $data->total()]);
     }
 
     /**
