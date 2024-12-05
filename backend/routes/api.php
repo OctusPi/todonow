@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
     $common = function (string $prefix, string $controller) {
         Route::prefix($prefix)->controller($controller)->group(function () {
             Route::post('/save', 'save');
-            Route::post('/list/{page?}/{total_page?}', 'list');
+            Route::post('/list/{page?}', 'list');
             Route::get('/destroy/{id}', 'delete');
             Route::get('/details/{id}', 'details');
             Route::get('', 'index');

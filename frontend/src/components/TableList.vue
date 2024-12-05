@@ -1,53 +1,45 @@
 <template>
-	<div v-if="sent" class="tablelist" :class="[props.secondary ? 'tablelist-sec' : 'tablelist-prim']">
-		<div v-if="body.length" class="relative">
+	<div v-if="sent" class="tablelist">
+		<div v-if="body?.data && body?.data.length" class="relative">
 			<table>
 				<thead>
 					<tr>
-						<th v-if="$slots.select"></th>
 						<th v-for="(item, i) in props.header" :key="i"
 							@click="(e) => props.order && orderBy(e, item.key)">
 							<div class="flex items-center gap-1 text-xs font-bold cursor-pointer">
 								{{ item.title }}
-								<component v-if="props.order" :is="ArrowsUpDownIcon" class="h-3 w-3 ms-1"></component>
+								<component v-if="props.order && !item?.noOrder" :is="ArrowsUpDownIcon"
+									class="h-3 w-3 ms-1 hover:text-sky-400"></component>
 							</div>
 						</th>
-						<th v-if="props.actions && !$slots.select"></th>
+						<th v-if="props.actions"></th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="(instance, i) in userBody" :key="i" @click="(e) => $slots.select && checkInput(e)"
-						:class="[$slots.select && 'cursor-pointer']" class="even:bg-slate-400 even:bg-opacity-15 hover:bg-slate-500 hover:bg-opacity-15">
-						<td v-if="$slots.select" class="align-middle">
-							<slot :instance="toRaw(instance)" name="select"></slot>
-						</td>
+					<tr v-for="(instance, i) in userBody?.data" :key="i" :class="[$slots.select && 'cursor-pointer']"
+						class="even:bg-slate-400 even:bg-opacity-15 hover:bg-slate-500 hover:bg-opacity-15">
+
 						<td v-for="(mounted, j) in applyMounters(instance, userHeader)" :key="j" class="align-middle">
 							<div>
-								<div v-if="userHeader[j].key" class="text-xs txt-color font-medium" :class="mounted.classes"
+								<span v-if="userHeader[j].key || userHeader[j].isCheck"
+									class="text-xs txt-color font-medium" :class="mounted.classes"
 									:title="getTitle(mounted)">
-									<template v-if="!userHeader[j].isBool">
+									<template v-if="!userHeader[j].isCheck">
 										{{ getValue(mounted.value, userHeader[j]) }}
 									</template>
 									<template v-else>
-										<component v-if="mounted.value && mounted.value != ''" :is="CheckIcon"
-											class="h-5 w-5 mx-auto text-green-700" />
-										<component v-else :is="XMarkIcon" class="h-5 w-5 mx-auto text-red-700" />
+										<input type="checkbox" :name="`${identify}_${i}`"
+											@change="userHeader[j].action(instance)" class="me-6 md:me-3"
+											:checked="instance[userHeader[j].check] == userHeader[j].check_value">
 									</template>
-								</div>
+								</span>
 							</div>
 							<div>
 								<span v-for="(submounted, k) in applyMounters(instance, userHeader[j].sub ?? [])"
 									:key="k" class="inline-block text-xs txt-color-sec me-1"
 									:title="getTitle(submounted)" :class="submounted.classes">
-									<template v-if="!userHeader[j].sub[k].isBool">
-										{{ userHeader[j].sub[k].title }}
-										{{ getValue(submounted.value, userHeader[j].sub[k]) }}
-									</template>
-									<template v-else>
-										<component v-if="submounted.value && submounted.value != ''" :is="CheckIcon"
-											class="h-5 w-5 mx-auto text-green-700" />
-										<component v-else :is="XMarkIcon" class="h-5 w-5 mx-auto text-red-700" />
-									</template>
+									{{ userHeader[j].sub[k].title }}
+									{{ getValue(submounted.value, userHeader[j].sub[k]) }}
 								</span>
 							</div>
 						</td>
@@ -62,16 +54,17 @@
 									leave-active-class="transition duration-150 ease-in"
 									leave-from-class="translate-y-0 opacity-100"
 									leave-to-class="translate-y-1 opacity-0">
-									<PopoverPanel class="absolute right-2 z-10 mt-1 p-4 w-auto rounded-md shadow-sm drop-menu">
+									<PopoverPanel
+										class="absolute right-2 z-10 mt-1 p-4 w-auto rounded-md shadow-sm drop-menu">
 										<ul class="grid grid-cols-1 space-y-0">
-												<li v-for="(item, j) in props.actions" :key="j"
-													class="p-2 flex items-center cursor-pointer text-xs rounded-md drop-menu-item" href="#"
-													@click.prevent="item.action && item.action(instance.id)"
-													:data-bs-target="item.modal"
-													:data-bs-toggle="item.modal ? 'modal' : null">
-													<component :is="item.icon" class="h-4 w-4 me-1" />
-													{{ item.title }}
-											  </li>
+											<li v-for="(item, j) in props.actions" :key="j"
+												class="p-2 flex items-center cursor-pointer text-xs rounded-md drop-menu-item"
+												href="#" @click.prevent="item.action && item.action(instance.id)"
+												:data-bs-target="item.modal"
+												:data-bs-toggle="item.modal ? 'modal' : null">
+												<component :is="item.icon" class="h-4 w-4 me-1" />
+												{{ item.title }}
+											</li>
 										</ul>
 									</PopoverPanel>
 								</transition>
@@ -82,11 +75,13 @@
 				</tbody>
 			</table>
 		</div>
+
 		<div v-else class="text-center p-4 txt-color-sec">
 			<component :is="CubeTransparentIcon" class="w-8 h-8 mx-auto" />
 			<p class="p-0 m-0 mt-4 text-xs">Não foram localizados registros...</p>
 		</div>
 	</div>
+
 	<div v-else class="text-center txt-color-sec p-4">
 		<component :is="ChatBubbleLeftEllipsisIcon" class="w-8 h-8 mx-auto" />
 		<p class="p-0 m-0 mt-4 text-xs">Aplique o filtro na opção localizar, para visualizar os dados...</p>
@@ -94,21 +89,20 @@
 </template>
 
 <script setup>
-import { ref, watch, toRaw } from "vue"
+import { ref, watch } from "vue"
 import Mounts from "@/services/mounts"
-import { ArrowsUpDownIcon, ChatBubbleLeftEllipsisIcon, CheckIcon, CubeTransparentIcon, EllipsisVerticalIcon, XMarkIcon } from "@heroicons/vue/24/outline";
+import { ArrowsUpDownIcon, ChatBubbleLeftEllipsisIcon, CubeTransparentIcon, EllipsisVerticalIcon } from "@heroicons/vue/24/outline";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
 
 const props = defineProps({
+	identify: { type: String },
 	sent: { type: Boolean, default: true },
-	body: { type: Array, default: () => [] },
+	body: { type: Object, default: () => { } },
 	header: { type: Array, default: () => [] },
 	actions: { type: Array },
 	virtual: { type: Object, default: () => ({}) },
 	mounts: { type: Object },
 	order: { type: Boolean, default: true },
-	count: { type: Boolean, default: true },
-	secondary: { type: Boolean, default: false }
 })
 
 const userBody = ref(props.body)
@@ -133,12 +127,12 @@ function multiplexer(instance, key) {
 function orderBy(e, key) {
 	if (e.target.dataset.asc) {
 		e.target.removeAttribute('data-asc')
-		userBody.value.sort((a, b) => {
+		userBody.value?.data.sort((a, b) => {
 			return a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0
 		})
 	} else {
 		e.target.dataset.asc = true
-		userBody.value.sort((a, b) => {
+		userBody.value?.data.sort((a, b) => {
 			return a[key] < b[key] ? 1 : a[key] > b[key] ? -1 : 0
 		})
 	}
@@ -181,15 +175,9 @@ function getTitle(item) {
 }
 
 function getValue(value, header) {
-	return value && value != ''
+	return value && value != '***'
 		? value
 		: header.err || '***'
-}
-
-function checkInput(e) {
-	if (e.target.tagName != 'INPUT') {
-		e.currentTarget.querySelector('input').click()
-	}
 }
 
 watch(() => props.body, (newval) => {
@@ -240,11 +228,11 @@ table tr td:last-child {
 	padding-right: 2vw;
 }
 
-.drop-menu{
-    background-color: var(--background-secondary-color);
+.drop-menu {
+	background-color: var(--background-secondary-color);
 }
 
-.drop-menu-item:hover{
-    background-color: var(--background-color)
+.drop-menu-item:hover {
+	background-color: var(--background-color)
 }
 </style>

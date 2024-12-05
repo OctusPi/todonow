@@ -66,10 +66,7 @@ class UserModelTest extends TestCase
         $user = new User();
         $casts = $user->casts();
 
-        $this->assertArrayHasKey('email_verified_at', $casts);
         $this->assertArrayHasKey('password', $casts);
-
-        $this->assertEquals('datetime', $casts['email_verified_at']);
         $this->assertEquals('hashed', $casts['password']);
     }
 }

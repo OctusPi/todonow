@@ -5,7 +5,7 @@
       <div class="flex items-center">
         <RouterLink class="flex items-center" to="/dashboard">
           <img src="@/assets/imgs/logo-white.svg" alt="Logo Sistema" class="nav-brand me-2">
-          <h1 class="text-sm font-semibold p-0 m-0 hidden md:block">To List</h1>
+          <h1 class="text-sm font-semibold p-0 m-0 hidden md:block">To Do List</h1>
         </RouterLink>
         <nav v-if="auth_user" class="items-center ms-4 text-xs space-x-2 hidden md:flex ">
           <RouterLink to="/plans">Planos</RouterLink>
@@ -16,7 +16,8 @@
       <nav class="flex relative items-center ms-4 text-xs space-x-4">
         
         <div class="flex items-center text-xs space-x-2">
-          <component :is="MoonIcon" class="h-4 w-4"></component>
+          <component v-if="dark_mode" :is="MoonIcon" class="h-4 w-4"></component>
+          <component v-else :is="SunIcon" class="h-5 w-5"></component>
           <Switch v-model="dark_mode" @click="apply_theme" :class="dark_mode ? 'bg-sky-500' : 'bg-slate-400'"
             class="relative inline-flex h-[16px] w-[32px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
             <span class="sr-only">Dark Mode</span>
@@ -62,7 +63,7 @@ import http from "@/services/http.js"
 import theme from "@/stores/theme.js";
 import auth from "@/stores/auth.js"
 import { Popover, PopoverButton, PopoverPanel, Switch } from "@headlessui/vue";
-import { ArrowLeftStartOnRectangleIcon, MoonIcon, UserCircleIcon } from '@heroicons/vue/24/outline';
+import { ArrowLeftStartOnRectangleIcon, MoonIcon, SunIcon, UserCircleIcon } from '@heroicons/vue/24/outline';
 
 const emit = defineEmits(['callAlert']);
 const auth_user = ref(auth.get_user())

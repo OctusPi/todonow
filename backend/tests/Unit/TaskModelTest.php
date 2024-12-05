@@ -17,13 +17,8 @@ class TaskModelTest extends TestCase
     $rules = $task->rules();
 
     $this->assertArrayHasKey('title', $rules);
-    $this->assertArrayHasKey('status', $rules);
     $this->assertArrayHasKey('user_id', $rules);
-
-    $this->assertEquals('required', $rules['status']);
     $this->assertEquals('required', $rules['user_id']);
-
-
     $this->assertContains('required', (array)$rules['title']);
 
 

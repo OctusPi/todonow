@@ -26,7 +26,7 @@
                     Para registrar uma tarefa informe seu título e adicione uma descrição.
                   </p>
                 </div>
-                
+
               </DialogTitle>
 
               <div class="mt-6">
@@ -35,14 +35,14 @@
                     <div class="col-span-6">
                       <label for="title" class="label-input">Título da Tarefa</label>
                       <input id="title" name="title" type="text" v-model="page.data.title"
-                        :class="{ 'form-control-alert': page.valids.title }"
-                        class="text-input w-full" placeholder="Fazer Compras" />
+                        :class="{ 'form-control-alert': page.valids.title }" class="text-input w-full"
+                        placeholder="Fazer Compras" />
                     </div>
                     <div class="col-span-6">
                       <label for="description" class="label-input">Descrição da Tarefa</label>
                       <textarea id="description" name="description" v-model="page.data.description" rows="5"
-                      class="text-input w-full"
-                      placeholder="Lembrar de comprar leite e pão quando for ao mercado"></textarea>
+                        class="text-input w-full"
+                        placeholder="Lembrar de comprar leite e pão quando for ao mercado"></textarea>
                     </div>
 
                   </div>
@@ -105,7 +105,7 @@
 
           <form @submit.prevent="action.list">
             <div class="grid grid-cols-6 gap-4">
-              
+
               <div class="col-span-6 md:col-span-2">
                 <label for="title" class="label-input">Titulo</label>
                 <input id="title" name="title" type="text" v-model="page.search.title" class="text-input w-full"
@@ -113,14 +113,14 @@
               </div>
               <div class="col-span-6 md:col-span-2">
                 <label for="description" class="label-input">Descrição</label>
-                <input id="description" name="description" type="text" v-model="page.search.description" class="text-input w-full"
-                  placeholder="Busque pela descrição da tarefa" />
+                <input id="description" name="description" type="text" v-model="page.search.description"
+                  class="text-input w-full" placeholder="Busque pela descrição da tarefa" />
               </div>
               <div class="col-span-6 md:col-span-2">
                 <label for="status" class="label-input">Status</label>
                 <select id="status" name="status" v-model="page.search.status" class="text-input w-full">
-                  <option></option> 
-                  <option v-for="(i,j) in page.selects.status" :key="j" :value="i">{{ i }}</option> 
+                  <option></option>
+                  <option v-for="(i, j) in page.selects.status" :key="j" :value="i">{{ i }}</option>
                 </select>
               </div>
             </div>
@@ -135,12 +135,16 @@
 
         <!-- List Box -->
         <div id="content-list">
-          <TableList :header="page.headers" :body="page.datalist" :actions="[
+        
+          <TableList :header="page.headers" :body="page.datalist" identify="list_tasks" :mounts="{
+            description: [Mounts.Truncate(100)],
+            status: [Mounts.Status()]
+          }" :actions="[
             Actions.Edit(action.update),
             Actions.Delete(action.remove)
-          ]" :mounts="{
-            stock_quantity: [Mounts.CompareSize('stock_alert')]
-          }" />
+          ]" />
+
+          <PaginatorUi v-model="page.datalist" :search="page.search" :url="page.url" class="mt-4"/>
         </div>
 
 
@@ -161,28 +165,33 @@ import TableList from "@/components/TableList.vue";
 import Mounts from "@/services/mounts";
 import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from '@headlessui/vue';
 import { CheckIcon, DocumentTextIcon, MagnifyingGlassIcon, PlusCircleIcon, XMarkIcon } from "@heroicons/vue/24/outline";
+import http from "@/services/http";
+import PaginatorUi from "@/components/PaginatorUi.vue";
 
 const emit = defineEmits(['callAlert', 'callRemove'])
-const props = defineProps({ datalist: { type: Array, default: () => [] } })
+const props = defineProps({ datalist: { type: Object, default: () => { } } })
 const [page, action] = Layout.new(emit, {
   url: '/tasks',
   data: {},
   search: { sent: false },
   datalist: props.datalist,
   headers: [
-    { title: 'ITEM', key: 'name', sub: [{ key: 'barcode' }] },
-    { title: 'FORNECEDOR', key: 'category', sub: [{ key: 'supplier' }] },
-    { title: 'QUANTIDADE', key: 'stock_quantity', sub: [{ key: 'measure_unit' }] },
-    { title: 'ALERTA', key: 'stock_alert', sub: [{ key: 'measure_unit' }] },
-    { title: 'VENDA', key: 'price_sale', sub: [{ key: 'measure_unit' }] },
+    { title: '', check: 'status', check_value: 'Finalizada', action: updateTask, isCheck: true, noOrder: true },
+    { title: 'TAREFA', key: 'title', sub: [{ key: 'description' }] },
+    { title: 'STATUS', key: 'status' },
   ],
   selects: {
-    status:['Pendente', 'Finalizada']
+    status: ['Pendente', 'Finalizada']
   },
   rules: {
     title: 'required'
   }
 })
+
+function updateTask(task) {
+  task.status = task.status == 'Finalizada' ? 'Pendente' : 'Finalizada'
+  http.post(`${page.url}/save`, task, emit)
+}
 
 watch(() => props.datalist, (newdata) => {
   page.datalist = newdata

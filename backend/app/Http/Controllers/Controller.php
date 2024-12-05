@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Utils\Notify;
 use App\Security\Guardian;
+use App\Utils\Utils;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Log;
 use Validator;
 
 /**
@@ -20,7 +22,7 @@ abstract class Controller
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public const PAGINATION_SIZE = 20;
+    public const PAGINATION_SIZE = 5;
 
     /**
      * @param Model|null $model The model associated with this controller.
@@ -53,8 +55,11 @@ abstract class Controller
 
         $dataModel = array_merge($request->all(), ['user_id' => $request->user()?->id], $override);
 
-        if ($request->id && !$this->model->find($request->id)) {
-            return self::responseJson(404, 'Registro não encontrado.');
+        if ($request->id) {
+            $this->model = $this->model->find($request->id);
+            if(!$this->model){
+                return self::responseJson(404, 'Registro não encontrado.');
+            }
         }
 
         $this->model->fill($dataModel);
@@ -110,25 +115,24 @@ abstract class Controller
     public final function baseList(Request $request, array $search = [], ?array $order = null, ?array $with = null, ?array $between = null)
     {
         Guardian::AuthCheck($this->model, $request);
-        $filter = array_merge($search, $this->insertUser($request));
+        $filter = array_merge(array_filter($search), $this->insertUser($request));
 
         $query = $this->model->query();
         $query->where(function ($query) use ($filter) {
             foreach ($filter as $k => $v) {
-                $query->where($k, $v);
+                $query->where($k, Utils::map_operator($v), Utils::map_value($v));
             }
         });
 
         array_filter([
             $between ? fn() => $query->whereBetween(key($between), current($between)) : null,
             $order ? fn() => $query->orderBy(...$order) : null,
-            $with ? fn() => $query->with($with) : null,
-            $request->page ? fn() => $query->paginate($request->total_page ?? self::PAGINATION_SIZE, page: $request->page) : null,
+            $with ? fn() => $query->with($with) : null
         ], fn($clause) => $clause && $clause());
 
-        $data = $query->get();
+        $requestPage = $request->route()->parameters();
 
-        return response()->json(['data' => $data?->toArray(), 'total' => $data->total()]);
+        return response()->json($query->paginate(self::PAGINATION_SIZE, page: $requestPage['page'] ?? 1));
     }
 
     /**

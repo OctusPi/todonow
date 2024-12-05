@@ -7,7 +7,7 @@ import AlertUi from './components/AlertUi.vue';
 import ModalDeleteUi from './components/ModalDeleteUi.vue';
 
 const alert = ref({ show: false, data: {} });
-const list = ref([]);
+const list = ref({});
 const erase = ref({id:null, url: null});
 
 onMounted(() => {

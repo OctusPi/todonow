@@ -12,5 +12,9 @@ class Tasks extends Controller
         parent::__construct(new Task());
     }
 
-
+    public function list(Request $request)
+    {
+        $search = $request->only(['title', 'description', 'status']);
+        return $this->baseList($request, $search);
+    }
 }
