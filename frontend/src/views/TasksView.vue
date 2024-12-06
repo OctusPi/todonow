@@ -99,7 +99,7 @@
             </div>
             <div class="text-end">
               <h2 class="text-sm m-0 p-0 font-semibold">Localizar</h2>
-              <p class="text-xs m-0 p-0 font-light">Aplique o filtro para localizar os itens no estoque</p>
+              <p class="text-xs m-0 p-0 font-light">Aplique o filtro para localizar suas tarefas</p>
             </div>
           </header>
 
