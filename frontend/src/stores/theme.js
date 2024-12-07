@@ -18,7 +18,7 @@ function apply_theme() {
 	if (screen) {
 		screen.classList.remove('light');
 		screen.classList.remove('dark');
-		screen.classList.add(theme.value ?? 'dark');
+		screen.classList.add(theme.value ?? 'light');
 	}
 }
 
